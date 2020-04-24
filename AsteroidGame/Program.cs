@@ -10,7 +10,7 @@ namespace AsteroidGame
     {
         [STAThread]
         static void Main()
-        {
+         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

@@ -14,11 +14,13 @@ namespace AsteroidGame
         private static BufferedGraphics __Buffer;
 
         private static VisualObject[] __GameObjects;
+        private static SunStar __SunStar;
+        //private static Ship __Ship;
 
         public static int Width { get; set; }
 
         public static int Height { get; set; }
-      
+
         public static void Initialize(Form form)
         {
             Width = form.Width;
@@ -49,6 +51,7 @@ namespace AsteroidGame
             //g.FillEllipse(Brushes.Red, new Rectangle(100,50, 70,120));
 
             foreach (var game_object in __GameObjects)
+
                 game_object.Draw(g);
 
             __Buffer.Render();
@@ -56,23 +59,25 @@ namespace AsteroidGame
 
         public static void Load()
         {
-            __GameObjects = new VisualObject[30];
+            List<VisualObject> game_object = new List<VisualObject>();
 
-            for (var i = 0; i < __GameObjects.Length / 2; i++)
-            {
-                __GameObjects[i] = new VisualObject(
-                    new Point(600, i * 20),
-                    new Point(15 - i, 20 - i),
-                    new Size(20, 20));
-            }
+            //for (var i = 0; i < 10; i++)
+            //{
+            //    game_object.Add(new VisualObject(
+            //        new Point(600, i * 20),
+            //        new Point(15 - i, 20 - i),
+            //        new Size(20, 20)));
+            //}
 
-            for (var i = __GameObjects.Length / 2; i < __GameObjects.Length; i++)
+            for (var i = 0; i < 10; i++)
             {
-                __GameObjects[i] = new Star(
+                game_object.Add(new Star(
                     new Point(400, (int)(i / 2.0 * 20)),
-                    new Point(- i, 0),
-                    10);
+                    new Point(-i, 0),
+                    10));
             }
+            __SunStar = new SunStar(400, 100);
+            __GameObjects = game_object.ToArray();
         }
 
         public static void Update()

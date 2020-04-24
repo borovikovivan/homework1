@@ -32,6 +32,7 @@ namespace AsteroidGame
         
         public virtual void Update()
         {
+            //var rnd = new Random();
             _Position.X += _Direction.X;
             _Position.Y += _Direction.Y;
 

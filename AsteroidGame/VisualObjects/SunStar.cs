@@ -28,4 +28,11 @@ namespace AsteroidGame
         {
         }
     }
+    internal class SpaceShip : ImageObject
+    {
+        public SpaceShip(Point Position, Point Direction, int ImageSize)
+    : base(Position, Direction, new Size(ImageSize, ImageSize), Properties.Resources.SunStar)
+        {
+        }
+    }
 }

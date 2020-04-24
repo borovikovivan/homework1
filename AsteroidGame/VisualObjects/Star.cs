@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AsteroidGame
 {
-    class Star : VisualObject
+    internal class Star : VisualObject
     {
         public Star(Point Position, Point Direction, int Size)
             : base(Position, Direction, new Size(Size, Size))
@@ -28,8 +28,14 @@ namespace AsteroidGame
         public override void Update()
         {
             _Position.X += _Direction.X;
+
             if (_Position.X < 0)
                 _Position.X = Game.Width + _Size.Width;
+
+            _Position.Y += _Direction.Y;
+
+            if (_Position.Y < 0)
+                _Position.Y = Game.Height + _Size.Height;
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 namespace AsteroidGame
@@ -15,7 +13,7 @@ namespace AsteroidGame
 
         private static VisualObject[] __GameObjects;
         private static SunStar __SunStar;
-        //private static Ship __Ship;
+        private static SpaceShip __SpaceShip;
 
         public static int Width { get; set; }
 
@@ -53,7 +51,11 @@ namespace AsteroidGame
             foreach (var game_object in __GameObjects)
 
                 game_object.Draw(g);
+
             __SunStar.Draw(g);
+
+            __SpaceShip.Draw(g);
+
             __Buffer.Render();
         }
 
@@ -61,15 +63,30 @@ namespace AsteroidGame
         {
             List<VisualObject> game_object = new List<VisualObject>();
 
+            var rnd = new Random();
+
             for (var i = 0; i < 10; i++)
             {
+                //game_object.Add(new Star(
+                //    new Point(400, (int)(i / 2.0 * 20)),
+                //    new Point(-i, 0),
+                //    10));
+
+                //делаем движение звезд в произвольном направлении
                 game_object.Add(new Star(
-                    new Point(400, (int)(i / 2.0 * 20)),
-                    new Point(-i, 0),
+                    new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
+                    new Point(rnd.Next(i), rnd.Next(i)),
                     10));
             }
 
-            __SunStar = new SunStar(new Point(350, 200), 100);
+            __SunStar = new SunStar(new Point(375, 275), 25);
+
+            const int ship_speed = 20;
+
+            __SpaceShip = new SpaceShip(
+                new Point(100, Height / 2),
+                new Point(),
+                25);
 
             __GameObjects = game_object.ToArray();
         }
@@ -79,6 +96,7 @@ namespace AsteroidGame
             foreach (var game_object in __GameObjects)
                 game_object.Update();
             __SunStar.Update();
+            __SpaceShip.Update();
         }
     }
 }

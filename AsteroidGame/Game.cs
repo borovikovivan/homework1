@@ -53,21 +53,13 @@ namespace AsteroidGame
             foreach (var game_object in __GameObjects)
 
                 game_object.Draw(g);
-
+            __SunStar.Draw(g);
             __Buffer.Render();
         }
 
         public static void Load()
         {
             List<VisualObject> game_object = new List<VisualObject>();
-
-            //for (var i = 0; i < 10; i++)
-            //{
-            //    game_object.Add(new VisualObject(
-            //        new Point(600, i * 20),
-            //        new Point(15 - i, 20 - i),
-            //        new Size(20, 20)));
-            //}
 
             for (var i = 0; i < 10; i++)
             {
@@ -76,7 +68,9 @@ namespace AsteroidGame
                     new Point(-i, 0),
                     10));
             }
-            __SunStar = new SunStar(400, 100);
+
+            __SunStar = new SunStar(new Point(350, 200), 100);
+
             __GameObjects = game_object.ToArray();
         }
 
@@ -84,6 +78,7 @@ namespace AsteroidGame
         {
             foreach (var game_object in __GameObjects)
                 game_object.Update();
+            __SunStar.Update();
         }
     }
 }

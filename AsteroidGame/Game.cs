@@ -50,19 +50,28 @@ namespace AsteroidGame
             switch (e.KeyCode.ToString())
             {
                 case "Right":
-                    DirX = 1;
+                    //нужно в update обновить с учетом привязки к текущей координате
+                    __SpaceShip = new SpaceShip(
+                new Point(100, 100),
+                new Point(10, 0),
+                50);
+                    //DirX = 1;
+                    //DirY = 0;
                     break;
 
                 case "Left":
                     DirX = -1;
+                    DirY = 0;
                     break;
 
                 case "Up":
                     DirY = -1;
+                    DirX = 0;
                     break;
 
                 case "Down":
                     DirY = 1;
+                    DirX = 0;
                     break;
             }
         }
@@ -79,9 +88,7 @@ namespace AsteroidGame
             Graphics g = __Buffer.Graphics;
 
             g.Clear(Color.Black);
-            //g.DrawRectangle(Pens.White, new Rectangle(50,50, 200,200));
-            //g.FillEllipse(Brushes.Red, new Rectangle(100,50, 70,120));
-
+            
             foreach (var game_object in __GameObjects)
 
                 game_object.Draw(g);
@@ -101,16 +108,16 @@ namespace AsteroidGame
 
             for (var i = 0; i < 10; i++)
             {
-
+                int r = rnd.Next(5,10);
                 //делаем движение звезд в произвольном направлении
                 game_object.Add(new Star(
                     new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
-                    new Point(rnd.Next(-10, 10), rnd.Next(-10, 10)),
+                    new Point(rnd.Next(-r, r), rnd.Next(-r, r)),
                     10));
 
             }
 
-            __SunStar = new SunStar(new Point(325, 225), 125);
+            __SunStar = new SunStar(new Point(325,225), 125);
 
             const int _ship_speed = 10;
 
@@ -121,14 +128,17 @@ namespace AsteroidGame
 
             __GameObjects = game_object.ToArray();
         }
-
+        //нужно обновить Update для обработки нажатия клавиши
         public static void Update()
 
         {
             foreach (var game_object in __GameObjects)
-                game_object.Update();
+            {
+               game_object.Update();
+            }
             __SunStar.Update();
             __SpaceShip.Update();
+
         }
 
     }

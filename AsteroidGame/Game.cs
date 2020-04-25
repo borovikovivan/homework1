@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using AsteroidGame.VisualObjects;
 
 namespace AsteroidGame
 {
@@ -14,6 +14,10 @@ namespace AsteroidGame
         private static BufferedGraphics __Buffer;
 
         private static VisualObject[] __GameObjects;
+        private static SunStar __SunStar;
+        private static SpaceShip __SpaceShip;
+        private static int DirX, DirY;
+
 
         public static int Width { get; set; }
 
@@ -32,7 +36,46 @@ namespace AsteroidGame
             timer.Tick += OnVimerTick;
             timer.Start();
 
+            //обработчик нажатия клавиши
+
+            form.KeyDown += new KeyEventHandler(Game_form_KeyDown);
+
         }
+
+        //задаем клавиши для управления кораблем
+        private static void Game_form_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            MessageBox.Show(e.KeyCode.ToString());
+            switch (e.KeyCode.ToString())
+            {
+                case "Right":
+                    //нужно в update обновить с учетом привязки к текущей координате
+                    __SpaceShip = new SpaceShip(
+                new Point(100, 100),
+                new Point(10, 0),
+                50);
+                    //DirX = 1;
+                    //DirY = 0;
+                    break;
+
+                case "Left":
+                    DirX = -1;
+                    DirY = 0;
+                    break;
+
+                case "Up":
+                    DirY = -1;
+                    DirX = 0;
+                    break;
+
+                case "Down":
+                    DirY = 1;
+                    DirX = 0;
+                    break;
+            }
+        }
+
 
         private static void OnVimerTick(object sender, EventArgs e)
         {
@@ -45,40 +88,58 @@ namespace AsteroidGame
             Graphics g = __Buffer.Graphics;
 
             g.Clear(Color.Black);
-            //g.DrawRectangle(Pens.White, new Rectangle(50,50, 200,200));
-            //g.FillEllipse(Brushes.Red, new Rectangle(100,50, 70,120));
-
+            
             foreach (var game_object in __GameObjects)
+
                 game_object.Draw(g);
+
+            __SunStar.Draw(g);
+
+            __SpaceShip.Draw(g);
 
             __Buffer.Render();
         }
 
         public static void Load()
         {
-            __GameObjects = new VisualObject[30];
+            List<VisualObject> game_object = new List<VisualObject>();
 
-            for (var i = 0; i < __GameObjects.Length / 2; i++)
+            var rnd = new Random();
+
+            for (var i = 0; i < 10; i++)
             {
-                __GameObjects[i] = new VisualObject(
-                    new Point(600, i * 20),
-                    new Point(15 - i, 20 - i),
-                    new Size(20, 20));
+                int r = rnd.Next(5,10);
+                //делаем движение звезд в произвольном направлении
+                game_object.Add(new Star(
+                    new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
+                    new Point(rnd.Next(-r, r), rnd.Next(-r, r)),
+                    10));
+
             }
 
-            for (var i = __GameObjects.Length / 2; i < __GameObjects.Length; i++)
-            {
-                __GameObjects[i] = new Star(
-                    new Point(600, (int)(i / 2.0 * 20)),
-                    new Point(- i, 0),
-                    10);
-            }
+            __SunStar = new SunStar(new Point(325,225), 125);
+
+            const int _ship_speed = 10;
+
+            __SpaceShip = new SpaceShip(
+                new Point(100,100),
+                new Point(),
+                50);
+
+            __GameObjects = game_object.ToArray();
         }
-
+        //нужно обновить Update для обработки нажатия клавиши
         public static void Update()
+
         {
             foreach (var game_object in __GameObjects)
-                game_object.Update();
+            {
+               game_object.Update();
+            }
+            __SunStar.Update();
+            __SpaceShip.Update();
+
         }
+
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using AsteroidGame.VisualObjects;
 
 namespace AsteroidGame
 {
@@ -14,6 +16,8 @@ namespace AsteroidGame
         private static VisualObject[] __GameObjects;
         private static SunStar __SunStar;
         private static SpaceShip __SpaceShip;
+        private static int DirX, DirY;
+
 
         public static int Width { get; set; }
 
@@ -32,7 +36,37 @@ namespace AsteroidGame
             timer.Tick += OnVimerTick;
             timer.Start();
 
+            //обработчик нажатия клавиши
+
+            form.KeyDown += new KeyEventHandler(Game_form_KeyDown);
+
         }
+
+        //задаем клавиши для управления кораблем
+        private static void Game_form_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            MessageBox.Show(e.KeyCode.ToString());
+            switch (e.KeyCode.ToString())
+            {
+                case "Right":
+                    DirX = 1;
+                    break;
+
+                case "Left":
+                    DirX = -1;
+                    break;
+
+                case "Up":
+                    DirY = -1;
+                    break;
+
+                case "Down":
+                    DirY = 1;
+                    break;
+            }
+        }
+
 
         private static void OnVimerTick(object sender, EventArgs e)
         {
@@ -67,36 +101,35 @@ namespace AsteroidGame
 
             for (var i = 0; i < 10; i++)
             {
-                //game_object.Add(new Star(
-                //    new Point(400, (int)(i / 2.0 * 20)),
-                //    new Point(-i, 0),
-                //    10));
 
                 //делаем движение звезд в произвольном направлении
                 game_object.Add(new Star(
                     new Point(rnd.Next(0, Width), rnd.Next(0, Height)),
-                    new Point(rnd.Next(i), rnd.Next(i)),
+                    new Point(rnd.Next(-10, 10), rnd.Next(-10, 10)),
                     10));
+
             }
 
-            __SunStar = new SunStar(new Point(375, 275), 25);
+            __SunStar = new SunStar(new Point(325, 225), 125);
 
-            const int ship_speed = 20;
+            const int _ship_speed = 10;
 
             __SpaceShip = new SpaceShip(
-                new Point(100, Height / 2),
+                new Point(100,100),
                 new Point(),
-                25);
+                50);
 
             __GameObjects = game_object.ToArray();
         }
 
         public static void Update()
+
         {
             foreach (var game_object in __GameObjects)
                 game_object.Update();
             __SunStar.Update();
             __SpaceShip.Update();
         }
+
     }
 }

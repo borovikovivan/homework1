@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsteroidGame
+namespace AsteroidGame.VisualObjects
 {
     internal class Star : VisualObject
     {
@@ -35,7 +35,7 @@ namespace AsteroidGame
             _Position.Y += _Direction.Y;
 
             if (_Position.Y < 0)
-                _Position.Y = Game.Height + _Size.Height;
+                _Position.Y = Game.Height - _Size.Height;
         }
     }
 }

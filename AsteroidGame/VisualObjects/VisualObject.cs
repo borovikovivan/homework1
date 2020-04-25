@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsteroidGame
+namespace AsteroidGame.VisualObjects
 {
     internal abstract class VisualObject
     {
@@ -20,14 +20,7 @@ namespace AsteroidGame
             _Size = Size;
         }
 
-        //public virtual void Draw(Graphics g)
-        //{
-        //    g.DrawEllipse(
-        //        Pens.White,
-        //        _Position.X, _Position.Y,
-        //        _Size.Width, _Size.Height
-        //        );
-        //}
+        
         public abstract void Draw(Graphics g);
         
         public virtual void Update()
@@ -35,7 +28,7 @@ namespace AsteroidGame
             //var rnd = new Random();
             _Position.X += _Direction.X;
             _Position.Y += _Direction.Y;
-
+           
             if (_Position.X < 0)
                 _Direction.X *= -1;
             if (_Position.Y < 0)
